@@ -1,5 +1,5 @@
 ---
-title: "README"
+title: "Getting and Cleaning Data Course Project"
 output: html_document
 ---
 
@@ -7,22 +7,83 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Introduction
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+The code is intended to run without any modification. The data that is used for the project is downloaded on the default directory, then unzipped. 
+After the project is done, the produced zip, directory and files are deleted.  
+The scripts can be found here <https://github.com/theoser2/datasciencecoursera/tree/master/Getting%20and%20cleaning%20data>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## 0. Download, extract and load the data sets.
 
-```{r cars}
-summary(cars)
+### Download
+Before even thinking of merging the datasets, I first need to download the zip file and extract it. In order to make the code able to run anywhere, I will use the default user directory "~".
+```{r eval=F, echo=T}
+setwd("~")
+if(file.exists("data_coursera.zip")) file.remove("data_coursera.zip")
+download.file("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip", destfile="data_coursera.zip")
 ```
 
-## Including Plots
+### Extract
+Now that I downloaded the file, I unzip it and move to the newly created directory "UCI HAR Dataset", that will be the main directory in the following.
+```{r eval=F, echo=T}
+unzip("data_coursera.zip")
+setwd("UCI HAR Dataset")
+```
 
-You can also embed plots, for example:
+### Load
+These datasets are located into two sub-directories: test and train. They are in txt structured format and therefore a simple read.table() does the job. Currently, we do not pay attention to variable names but we know they are located in a separate "feature.txt" at the main directory.
+```{r eval=F, echo=T}
+test_X_set <- read.table("test/X_test.txt", dec=".", header=F)
+test_y_set <- read.table("test/y_test.txt", dec=".", header=F)
+test_subject_set <- read.table("test/subject_test.txt", dec=".", header=F)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+train_X_set <- read.table("train/X_train.txt", dec=".", header=F)
+train_y_set <- read.table("train/y_train.txt", dec=".", header=F)
+train_subject_set <- read.table("train/subject_train.txt", dec=".", header=F)
+```
+For both train and test data sets: 
+* X_set contains 561 variables calculated from original accelerometer data.
+* y_set contains the activity label (corresponding activity names are in the "activity_labels.txt" file)
+* subject_set contains the number of the subject.
+
+## 1. Merges the training and the test sets to create one data set.
+As all variables are exactly in the same order, I simply need to use a rbind function to merge them. 
+```{r eval=F, echo=T}
+X_set <- rbind(train_X_set, test_X_set)
+y_set <- rbind(train_y_set, test_y_set)
+subject_set <- rbind(train_subject_set, test_subject_set)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+## 1. Merges the training and the test sets to create one data set.
+```{r eval=F, echo=T}
+unzip("data_coursera.zip")
+setwd("UCI HAR Dataset")
+```
+
+
+## 1. Merges the training and the test sets to create one data set.
+```{r eval=F, echo=T}
+unzip("data_coursera.zip")
+setwd("UCI HAR Dataset")
+```
+
+
+## 1. Merges the training and the test sets to create one data set.
+```{r eval=F, echo=T}
+unzip("data_coursera.zip")
+setwd("UCI HAR Dataset")
+```
+
+
+## 1. Merges the training and the test sets to create one data set.
+```{r eval=F, echo=T}
+unzip("data_coursera.zip")
+setwd("UCI HAR Dataset")
+```
+
+
+
+
+
