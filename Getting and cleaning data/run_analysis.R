@@ -8,7 +8,8 @@ setwd("UCI HAR Dataset")
 train_set <- read.csv("")
 test_set <- read.csv("")
 
-  
+
+
 
 # Removing files from your computer
 file.remove("data_coursera.zip")
