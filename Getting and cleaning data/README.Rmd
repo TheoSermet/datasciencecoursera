@@ -3,10 +3,6 @@ title: "Getting and Cleaning Data Course Project"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 ## Introduction
 
 The code is intended to run without any modification. The data that is used for the project is downloaded on the default directory, then unzipped. 
