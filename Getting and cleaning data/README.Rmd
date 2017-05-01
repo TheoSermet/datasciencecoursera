@@ -91,11 +91,13 @@ X_set_summary <- X_set_filt %>% group_by(subject, activities) %>% summarize_each
 ```
 
 ## Conclusion
-We also remove all the data, the zip downloaded and the directory created if you want to test it on your computer. 
+We also write the final tidy data set in a "submission.txt" file, then remove all the data, the zip downloaded, the submission file and the directory created if you want to test it on your computer. 
 ```{r eval=F, echo=T}
+write.table(X_set_summary, "submission.txt", row.name=FALSE)
 rm(list=ls(all=TRUE)) # Be careful with this instruction, delete everything in R workspace
 gc()
 file.remove("data_coursera.zip")
+file.remove("submission.txt")
 unlink("UCI HAR Dataset", recursive=T)
 ```
 

@@ -48,8 +48,10 @@ head(X_set_filt) # Checking names are added
 X_set_summary <- X_set_filt %>% group_by(subject, activities) %>% summarize_each(funs(mean))
 
 # Removing files and data from your computer
+write.table(X_set_summary, "submission.txt", row.name=FALSE)
 rm(list=ls(all=TRUE)) # Be careful with this instruction, delete everything in R workspace
 gc()
+setwd("~")
 file.remove("data_coursera.zip")
 unlink("UCI HAR Dataset", recursive=T)
 
