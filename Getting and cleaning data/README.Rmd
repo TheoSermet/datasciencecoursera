@@ -53,37 +53,50 @@ X_set <- rbind(train_X_set, test_X_set)
 y_set <- rbind(train_y_set, test_y_set)
 subject_set <- rbind(train_subject_set, test_subject_set)
 ```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
-## 1. Merges the training and the test sets to create one data set.
+Also, I merge X_set and subject_set as the subjects will be usefull in question 5.
 ```{r eval=F, echo=T}
-unzip("data_coursera.zip")
-setwd("UCI HAR Dataset")
+X_set <- X_set %>% mutate(subject = subject_set$V1)
+```
+
+## 2. Extracts only the measurements on the mean and standard deviation for each measurement.
+Using the table "feature.txt" in the main directory, I select the variables to extract with a regular expression filter. This produces a vector "to_extract" of the columns numbers to keep.
+Then, I extract these columns using the previous vector and also the last column that was the subject numbers (for Question 5). 
+```{r eval=F, echo=T}
+features <- read.table("features.txt", dec=".", header=F)
+to_extract <- grep("mean|std", as.character(features$V2))
+X_set_filt <- X_set[,c(to_extract, ncol(X_set))]
+```
+
+## 3.Uses descriptive activity names to name the activities in the data set.
+Here I load the activity labels from the "activity_labels.txt" file, then I join it to the y_set data. This gives me a data.frame of the names corresponding to the X_set_filt data.frame activity names. 
+```{r eval=F, echo=T}
+activities <- read.table("activity_labels.txt", header=F, stringsAsFactors = F)
+activities_set <- y_set %>% left_join(activities, by="V1") # Left join to keep the order of y_set
+X_set_filt <- X_set_filt %>% mutate(activities = as.character(activities_set$V2))
+head(X_set_filt) # Checking activites are added
 ```
 
 
-## 1. Merges the training and the test sets to create one data set.
+## 4. Appropriately labels the data set with descriptive variable names.
 ```{r eval=F, echo=T}
-unzip("data_coursera.zip")
-setwd("UCI HAR Dataset")
+names(X_set_filt)[1:79] <- as.character(features$V2[to_extract])
 ```
 
 
-## 1. Merges the training and the test sets to create one data set.
+## 5. From the data set in step 4:
+### creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+Here I simply group the X_set_filt on the subject an activities columns before applying the average of all the other variables. 
 ```{r eval=F, echo=T}
-unzip("data_coursera.zip")
-setwd("UCI HAR Dataset")
+X_set_summary <- X_set_filt %>% group_by(subject, activities) %>% summarize_each(funs(mean))
 ```
 
-
-## 1. Merges the training and the test sets to create one data set.
+## Conclusion
+We also remove all the data, the zip downloaded and the directory created if you want to test it on your computer. 
 ```{r eval=F, echo=T}
-unzip("data_coursera.zip")
-setwd("UCI HAR Dataset")
+rm(list=ls(all=TRUE)) # Be careful with this instruction, delete everything in R workspace
+gc()
+file.remove("data_coursera.zip")
+unlink("UCI HAR Dataset", recursive=T)
 ```
-
-
-
 
 

@@ -7,22 +7,43 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## 0. Download, extract and load the data sets.
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+The following variables or files are created in this section:
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+* "data_coursera.zip": the zip downloaded is copied with this name.
+* test_X_set: contains the 561 calculations detailed in the file "features.txt" for the test set
+* test_y_set: contains the activity numbers that can be associated to acitvity names with the file "activity_labels.txt" for the test set
+* test_subject_set: contains the subjects numbers to keep track of the people who did the activity for test set
+* train_X_set: contains the 561 calculations detailed in the file "features.txt" for the train set
+* train_y_set: contains the activity numbers that can be associated to acitvity names with the file "activity_labels.txt" for train set
+* train_subject_set: contains the subjects numbers to keep track of the people who did the activity for train set
 
-```{r cars}
-summary(cars)
-```
+## 1. Merges the training and the test sets to create one data set.
 
-## Including Plots
+* y_set: contains the activity numbers that can be associated to acitvity names with the file "activity_labels.txt" for the whole set. Built from an rbind on train_y_set and test_y_set.
+* subject_set: contains the subjects numbers to keep track of the people who did the activity for the whole set. Built from an rbind on train_subject_set and test_subject_set
+* X_set: contains the 561 calculations detailed in the file "features.txt" for the whole set as well as one more column: the subject numbers. Built from an rbind on train_X_set and test_X_set, then a mutate with subject_set to add the subject numbers.
 
-You can also embed plots, for example:
+## 2. Extracts only the measurements on the mean and standard deviation for each measurement.
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+* features: data from the file "features.txt", all the calculations that have been performed on the row data from accelerometers. It corresponds to the columns of the X_set (except the subject)
+* to_extract: vector of columns ranks built from features. Built using grep on regular expression "mean" or "std". 
+* X_set_filt: data frame of the whole dataset after extraction of columns that concern the measurements on the mean and standard deviation for each measurement. Built by extracting the to_extract filter to the columns of X_set (and also keeping the last one, subject).
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## 3.Uses descriptive activity names to name the activities in the data set.
+
+* activities: data frame of activies with their number on V1 and the name on V2. Read from "activity_labels.txt".
+* activities_set: created by joining the y_set that contains all the activites number corresponding to the X_set_filt data set to the corresponding names from activities by a left_join (in order to keep the exact order of the original y_set). 
+* X_set_filt is modified to add the activities using the vector V2 of the data frame activities_set with mutate.
+
+## 4. Appropriately labels the data set with descriptive variable names.
+No variable is created in this section. Only the names of the X_set_filt are modified. 
+
+## 5. From the data set in step 4:
+### creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+
+* X_set_summary: last tidy data set with average of each variable as requested. Built using a group_by with activities and subjects columns before applying summarize_all with a mean function. 
+
+
+
