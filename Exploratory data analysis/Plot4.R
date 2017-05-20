@@ -1,5 +1,3 @@
-library(dplyr)
-
 download.file("https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip", destfile="EDA_coursera.zip")
 unzip("EDA_coursera.zip")
 dataset <- read.table("household_power_consumption.txt", sep=";", dec=".", 
